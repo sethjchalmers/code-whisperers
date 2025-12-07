@@ -1,0 +1,44 @@
+# Agent-to-Agent Code Review Pipeline
+# Core dependencies
+langchain>=0.1.0
+langchain-openai>=0.0.5
+langchain-anthropic>=0.1.0
+langgraph>=0.0.20
+
+# Async support
+aiohttp>=3.9.0
+asyncio-throttle>=1.0.0
+
+# Git integration
+gitpython>=3.1.40
+
+# YAML/JSON processing
+pyyaml>=6.0
+jsonschema>=4.20.0
+
+# CLI
+click>=8.1.0
+rich>=13.7.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.23.0
+pytest-cov>=4.1.0
+
+# Utilities
+python-dotenv>=1.0.0
+pydantic>=2.5.0
+tenacity>=8.2.0
+
+# Optional: for local LLM support
+# llama-cpp-python>=0.2.0
+# transformers>=4.36.0
+
+# Optional: for Azure OpenAI
+# azure-identity>=1.15.0
+
+# Development
+black>=23.12.0
+isort>=5.13.0
+mypy>=1.8.0
+ruff>=0.1.0
