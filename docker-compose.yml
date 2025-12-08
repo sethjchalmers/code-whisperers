@@ -2,8 +2,8 @@
 # Quick setup for Code Whisperers with volume mounts
 #
 # Usage:
-#   docker-compose run --rm review          # Review current directory
-#   docker-compose run --rm review --staged # Review staged changes
+#   docker-compose run --rm review                     # Review vs main branch
+#   docker-compose run --rm review --diff HEAD~1       # Review last commit
 
 services:
   review:
@@ -17,7 +17,7 @@ services:
       - GITHUB_TOKEN=${GITHUB_TOKEN}
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
       - OLLAMA_HOST=${OLLAMA_HOST:-http://host.docker.internal:11434}
-    command: ["review", "--provider", "github-models"]
+    command: ["review", "--base", "main"]
 
   # Ollama service for local LLM (optional)
   ollama:

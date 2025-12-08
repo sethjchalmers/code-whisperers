@@ -41,12 +41,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Review changes in this PR
+          # Review changes in this PR vs base branch
           python -m cli.main review \
-            --commit ${{ github.event.pull_request.head.sha }} \
-            --provider github-models \
-            --output markdown \
-            --output-file review-report.md
+            --base ${{ github.event.pull_request.base.sha }} \
+            --head ${{ github.event.pull_request.head.sha }} \
+            --output review-report.md \
+            --format markdown
 
           # Post summary as PR comment
           echo "## 🎭 Code Whisperers Review" > pr-comment.md
@@ -59,9 +59,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python -m cli.main review \
-            --commit ${{ github.sha }} \
-            --provider github-models \
-            --output terminal
+            --diff HEAD~1 \
+            --format text
 
       - name: Comment on PR
         if: github.event_name == 'pull_request' && always()

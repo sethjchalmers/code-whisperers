@@ -25,7 +25,7 @@ while read local_ref local_sha remote_ref remote_sha; do
     fi
 
     # Run review on the range
-    $REVIEWER review --commit "$local_sha" --output terminal --no-repo-context
+    $REVIEWER review --diff "$COMMITS" --no-repo-context --format text
 
     RESULT=$?
     if [ $RESULT -ne 0 ]; then

@@ -30,9 +30,9 @@ class Settings:
     )
 
     # Default LLM provider and model
-    # Providers: openai, anthropic, azure, copilot, ollama
-    llm_provider: str = field(default_factory=lambda: os.getenv("LLM_PROVIDER", "openai"))
-    llm_model: str = field(default_factory=lambda: os.getenv("LLM_MODEL", "gpt-4-turbo-preview"))
+    # Providers: openai, anthropic, azure, copilot, ollama, github-models
+    llm_provider: str = field(default_factory=lambda: os.getenv("LLM_PROVIDER", "github-models"))
+    llm_model: str = field(default_factory=lambda: os.getenv("LLM_MODEL", "gpt-4o"))
     llm_temperature: float = field(
         default_factory=lambda: float(os.getenv("LLM_TEMPERATURE", "0.1"))
     )

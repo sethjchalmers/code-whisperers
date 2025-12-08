@@ -67,9 +67,9 @@ Write-Host ""
 Write-Host "✅ Code Whisperers installed successfully!" -ForegroundColor Green
 Write-Host ""
 Write-Host "🚀 Quick Start:" -ForegroundColor Cyan
-Write-Host "   code-whisperers review --staged     # Review staged changes"
-Write-Host "   code-whisperers review --all        # Review all changes"
-Write-Host "   code-whisperers review --help       # Show all options"
+Write-Host "   code-whisperers review --diff HEAD~1  # Review last commit"
+Write-Host "   code-whisperers review --base main     # Review changes vs main"
+Write-Host "   code-whisperers review --help          # Show all options"
 Write-Host ""
 Write-Host "🔑 Set your GitHub token for free AI access:" -ForegroundColor Yellow
 Write-Host "   `$env:GITHUB_TOKEN = 'ghp_your_token_here'"

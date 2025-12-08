@@ -52,7 +52,7 @@ pip install -r requirements.txt
 export GITHUB_TOKEN=ghp_your_token_here
 
 # Unleash them on your code
-python -m cli.main review --staged
+python -m cli.main review --diff HEAD~1
 ```
 
 Watch as eight AI experts simultaneously tell you everything wrong with your code! _Fun!_
@@ -106,20 +106,23 @@ python -m cli.main review --provider copilot
 
 ```bash
 # The basics
-python -m cli.main review                    # Review staged changes (the coward's choice)
+python -m cli.main review                    # Review changes vs main branch
 python -m cli.main review --files *.py       # Review specific files (targeted strike)
-python -m cli.main review --files "**/*.tf"  # Review all Terraform (Terry's favorite)
+python -m cli.main review --diff HEAD~1      # Review last commit
+python -m cli.main review --base develop     # Review changes vs develop branch
 
 # Speed vs thoroughness
-python -m cli.main review --parallel         # All agents at once (chaos mode)
+python -m cli.main review --parallel         # All agents at once (chaos mode, default)
+python -m cli.main review --sequential       # One at a time (patient mode)
 python -m cli.main review --no-repo-context  # Skip context (speed run)
 
 # Output options
 python -m cli.main review --output roast.md  # Save the burns for later
+python -m cli.main review --format json      # Machine-readable roasts
 
 # The full arsenal
-python -m cli.main agents                    # See who's on duty
 python -m cli.main validate --files *.py     # Syntax check (no AI required)
+python -m cli.main config --show             # See current config
 ```
 
 ## 🎯 Example Output
@@ -278,16 +281,14 @@ docker-compose run --rm review
 
 ### Quick Install Script
 
-```bash
+````bash
 # Linux/macOS
 curl -fsSL https://raw.githubusercontent.com/sethjchalmers/code-whisperers/master/scripts/install.sh | bash
 
 # Windows PowerShell
 iwr -useb https://raw.githubusercontent.com/sethjchalmers/code-whisperers/master/scripts/install.ps1 | iex
 
-# Then use anywhere:
-code-whisperers review --staged
-```
+# Then use anywhere:\ncode-whisperers review --diff HEAD~1\n```
 
 ### GitHub Action (Auto-Review PRs)
 
@@ -305,16 +306,17 @@ cp scripts/git-hooks/pre-push .git/hooks/
 chmod +x .git/hooks/pre-push
 
 # Now every push gets reviewed first!
-```
+````
 
 ### VS Code Tasks
 
 Copy `.vscode/tasks.json` to your project for quick access:
 
 - `Ctrl+Shift+P` → "Tasks: Run Task"
-- 🎭 Code Review: Staged Changes
-- 🎭 Code Review: Current File
 - 🎭 Code Review: Last Commit
+- 🎭 Code Review: vs Main
+- 🎭 Code Review: Current File
+- 🔍 Validate: Current File
 
 ## 🤝 Join The Team
 

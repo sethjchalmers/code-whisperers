@@ -79,7 +79,16 @@ Examples:
         "--agents",
         "-a",
         nargs="+",
-        choices=["terraform", "gitops", "jenkins", "python", "security", "cost"],
+        choices=[
+            "terraform",
+            "gitops",
+            "jenkins",
+            "python",
+            "security",
+            "cost",
+            "clean_code",
+            "aws",
+        ],
         help="Specific agents to run",
     )
     review_parser.add_argument(
