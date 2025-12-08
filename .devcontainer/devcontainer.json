@@ -1,0 +1,47 @@
+{
+  "name": "Code Whisperers",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter",
+        "charliermarsh.ruff",
+        "tamasfe.even-better-toml",
+        "redhat.vscode-yaml",
+        "github.copilot"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.formatting.provider": "none",
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.black-formatter",
+          "editor.formatOnSave": true
+        },
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit"
+        }
+      }
+    }
+  },
+  "postCreateCommand": "pip install -e '.[dev]' && pre-commit install",
+  "postStartCommand": "echo '🎭 Code Whisperers ready! Run: python -m cli.main review --help'",
+  "remoteEnv": {
+    "GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}"
+  },
+  "mounts": ["source=${localWorkspaceFolder}/../,target=/workspaces,type=bind"],
+  "workspaceFolder": "/workspaces/code-whisperers",
+  "forwardPorts": [],
+  "containerEnv": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTHONUNBUFFERED": "1"
+  }
+}

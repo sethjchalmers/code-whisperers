@@ -1,0 +1,40 @@
+#!/bin/bash
+# Git pre-push hook that runs Code Whisperers review
+# Install: cp scripts/git-hooks/pre-push .git/hooks/ && chmod +x .git/hooks/pre-push
+
+echo "🎭 Code Whisperers: Reviewing changes before push..."
+
+# Check if code-whisperers is available
+if command -v code-whisperers &> /dev/null; then
+    REVIEWER="code-whisperers"
+elif [ -f "${HOME}/.code-whisperers/.venv/bin/python" ]; then
+    REVIEWER="${HOME}/.code-whisperers/.venv/bin/python -m cli.main"
+else
+    echo "⚠️  Code Whisperers not installed, skipping review"
+    exit 0
+fi
+
+# Get the commits being pushed
+while read local_ref local_sha remote_ref remote_sha; do
+    if [ "$remote_sha" = "0000000000000000000000000000000000000000" ]; then
+        # New branch, review all commits
+        COMMITS="$local_sha"
+    else
+        # Existing branch, review new commits
+        COMMITS="$remote_sha..$local_sha"
+    fi
+
+    # Run review on the range
+    $REVIEWER review --commit "$local_sha" --output terminal --no-repo-context
+
+    RESULT=$?
+    if [ $RESULT -ne 0 ]; then
+        echo ""
+        echo "❌ Code review found issues. Push aborted."
+        echo "   To push anyway: git push --no-verify"
+        exit 1
+    fi
+done
+
+echo "✅ Code review passed!"
+exit 0

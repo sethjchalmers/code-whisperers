@@ -246,8 +246,75 @@ pytest tests/ -v
 # With coverage (we're thorough like that)
 pytest tests/ --cov=agents --cov=orchestration --cov-report=html
 
-# 48 tests. All passing. We're not hypocrites.
+# 49 tests. All passing. We're not hypocrites.
 ```
+
+## 🐳 Integration Options (Get Them Into Your Workflow)
+
+### Dev Container (VS Code)
+
+Open in a pre-configured development environment with one click:
+
+```bash
+# Clone and open in VS Code
+git clone https://github.com/sethjchalmers/code-whisperers.git
+code code-whisperers
+# VS Code will prompt: "Reopen in Container" - click it!
+```
+
+### Docker (Review Any Repo)
+
+```bash
+# Build the image
+docker build -t code-whisperers .
+
+# Review your current directory
+docker run -v $(pwd):/repo -e GITHUB_TOKEN=$GITHUB_TOKEN \
+    code-whisperers review /repo --provider github-models
+
+# Or use docker-compose
+docker-compose run --rm review
+```
+
+### Quick Install Script
+
+```bash
+# Linux/macOS
+curl -fsSL https://raw.githubusercontent.com/sethjchalmers/code-whisperers/master/scripts/install.sh | bash
+
+# Windows PowerShell
+iwr -useb https://raw.githubusercontent.com/sethjchalmers/code-whisperers/master/scripts/install.ps1 | iex
+
+# Then use anywhere:
+code-whisperers review --staged
+```
+
+### GitHub Action (Auto-Review PRs)
+
+Add `.github/workflows/code-review.yml` to your repo - see `scripts/github-action-example.yml` for a complete template that:
+
+- Reviews every PR automatically
+- Posts findings as PR comments
+- Runs on push to main/master
+
+### Git Hook (Pre-Push Review)
+
+```bash
+# Install the hook
+cp scripts/git-hooks/pre-push .git/hooks/
+chmod +x .git/hooks/pre-push
+
+# Now every push gets reviewed first!
+```
+
+### VS Code Tasks
+
+Copy `.vscode/tasks.json` to your project for quick access:
+
+- `Ctrl+Shift+P` → "Tasks: Run Task"
+- 🎭 Code Review: Staged Changes
+- 🎭 Code Review: Current File
+- 🎭 Code Review: Last Commit
 
 ## 🤝 Join The Team
 
