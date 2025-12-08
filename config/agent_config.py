@@ -2,22 +2,21 @@
 Agent-specific configurations and prompts.
 """
 
-from dataclasses import dataclass, field
-from typing import Optional
+from dataclasses import dataclass
 
 
 @dataclass
 class AgentConfig:
     """Configuration for a specific expert agent."""
-    
+
     name: str
     description: str
     system_prompt: str
     file_patterns: list[str]  # File patterns this agent is interested in
     priority: int = 1  # Higher priority agents run first
     enabled: bool = True
-    model_override: Optional[str] = None  # Override the default model for this agent
-    temperature_override: Optional[float] = None
+    model_override: str | None = None  # Override the default model for this agent
+    temperature_override: float | None = None
 
 
 # Expert agent configurations
@@ -62,13 +61,22 @@ Your responsibilities:
    - Default values are sensible
 
 Provide specific, actionable feedback with code examples where applicable.
-Format your response as structured JSON with categories: best_practices, security, cost, quality, hallucinations."""
+Format your response as structured JSON with categories: best_practices, security, cost, quality, hallucinations.""",
 )
 
 GITOPS_AGENT_CONFIG = AgentConfig(
     name="gitops_expert",
     description="GitOps and Kubernetes Deployment Expert",
-    file_patterns=["*.yaml", "*.yml", "k8s/*", "kubernetes/*", "helm/*", "charts/*", "argocd/*", "flux/*"],
+    file_patterns=[
+        "*.yaml",
+        "*.yml",
+        "k8s/*",
+        "kubernetes/*",
+        "helm/*",
+        "charts/*",
+        "argocd/*",
+        "flux/*",
+    ],
     priority=2,
     system_prompt="""You are a senior GitOps and Kubernetes expert.
 
@@ -105,7 +113,7 @@ Your responsibilities:
    - Valid container image references
 
 Provide actionable recommendations with YAML examples.
-Format your response as structured JSON with categories: gitops, kubernetes, helm, deployment, hallucinations."""
+Format your response as structured JSON with categories: gitops, kubernetes, helm, deployment, hallucinations.""",
 )
 
 JENKINS_AGENT_CONFIG = AgentConfig(
@@ -147,7 +155,7 @@ Your responsibilities:
    - Proper Groovy syntax
    - Valid step names
 
-Format your response as structured JSON with categories: pipeline, security, performance, maintainability, hallucinations."""
+Format your response as structured JSON with categories: pipeline, security, performance, maintainability, hallucinations.""",
 )
 
 PYTHON_AGENT_CONFIG = AgentConfig(
@@ -191,7 +199,7 @@ Your responsibilities:
    - Proper import statements
    - Sensible default values
 
-Format your response as structured JSON with categories: quality, security, performance, testing, hallucinations."""
+Format your response as structured JSON with categories: quality, security, performance, testing, hallucinations.""",
 )
 
 SECURITY_AGENT_CONFIG = AgentConfig(
@@ -233,7 +241,7 @@ Your responsibilities:
    - Third-party risk
 
 Format your response as structured JSON with categories: vulnerabilities, secrets, infrastructure, compliance, supply_chain.
-Include severity levels: CRITICAL, HIGH, MEDIUM, LOW, INFO."""
+Include severity levels: CRITICAL, HIGH, MEDIUM, LOW, INFO.""",
 )
 
 COST_OPTIMIZATION_AGENT_CONFIG = AgentConfig(
@@ -274,7 +282,7 @@ Your responsibilities:
    - Cost anomaly detection setup
 
 Format your response as structured JSON with categories: rightsizing, strategies, architecture, waste, monitoring.
-Include estimated monthly savings where possible."""
+Include estimated monthly savings where possible.""",
 )
 
 

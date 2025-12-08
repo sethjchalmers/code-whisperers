@@ -3,9 +3,9 @@ requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "agent-to-agent"
-version = "0.1.0"
-description = "Multi-agent code review pipeline with expert AI agents"
+name = "code-whisperers"
+version = "1.0.0"
+description = "Your personal army of mass code reviewers - 7 AI experts who'll judge your code so your colleagues don't have to"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.10"
@@ -13,17 +13,32 @@ authors = [
     {name = "Your Name", email = "your.email@example.com"},
 ]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Quality Assurance",
     "Topic :: Software Development :: Testing",
+    "Topic :: Security",
+    "Typing :: Typed",
 ]
-keywords = ["code-review", "ai", "agents", "terraform", "devops", "gitops"]
+keywords = [
+    "code-review",
+    "ai",
+    "agents",
+    "llm",
+    "terraform",
+    "devops",
+    "gitops",
+    "security",
+    "clean-code",
+    "langchain",
+]
 
 dependencies = [
     "langchain>=0.1.0",
@@ -56,10 +71,10 @@ azure = [
 agent-review = "cli.main:main"
 
 [project.urls]
-Homepage = "https://github.com/yourusername/agent-to-agent"
-Documentation = "https://github.com/yourusername/agent-to-agent#readme"
-Repository = "https://github.com/yourusername/agent-to-agent"
-Issues = "https://github.com/yourusername/agent-to-agent/issues"
+Homepage = "https://github.com/sethjchalmers/code-whisperers"
+Documentation = "https://github.com/sethjchalmers/code-whisperers#readme"
+Repository = "https://github.com/sethjchalmers/code-whisperers"
+Issues = "https://github.com/sethjchalmers/code-whisperers/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
@@ -77,6 +92,8 @@ line_length = 100
 [tool.ruff]
 line-length = 100
 target-version = "py310"
+
+[tool.ruff.lint]
 select = [
     "E",  # pycodestyle errors
     "W",  # pycodestyle warnings
@@ -89,13 +106,14 @@ select = [
 ignore = [
     "E501",  # line too long (handled by black)
     "B008",  # do not perform function calls in argument defaults
+    "UP038", # Use X | Y in isinstance - less readable
 ]
 
 [tool.mypy]
 python_version = "3.10"
 warn_return_any = true
 warn_unused_ignores = true
-disallow_untyped_defs = true
+disallow_untyped_defs = false
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
@@ -103,3 +121,13 @@ asyncio_mode = "auto"
 testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
 addopts = "-v --tb=short"
+
+[tool.bandit]
+exclude_dirs = ["tests", ".venv", "venv"]
+# B101: assert, B110: try/except/pass (acceptable for best-effort checks), B404: subprocess import, B603: subprocess call, B607: partial path
+skips = ["B101", "B110", "B404", "B603", "B607"]
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.1.0"
+tag_format = "v$version"

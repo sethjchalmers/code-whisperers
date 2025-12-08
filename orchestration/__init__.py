@@ -1,5 +1,5 @@
 # Orchestration module
-from .pipeline import ReviewPipeline, PipelineState, ReviewResult
 from .coordinator import AgentCoordinator
+from .pipeline import PipelineState, ReviewPipeline, ReviewResult
 
 __all__ = ["ReviewPipeline", "PipelineState", "ReviewResult", "AgentCoordinator"]

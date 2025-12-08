@@ -2,19 +2,14 @@
 Tests for the agent base classes.
 """
 
-import pytest
-from agents.base_agent import (
-    ReviewFinding,
-    AgentResponse,
-    Severity,
-    FindingCategory,
-)
 from datetime import datetime
+
+from agents.base_agent import AgentResponse, FindingCategory, ReviewFinding, Severity
 
 
 class TestReviewFinding:
     """Test the ReviewFinding dataclass."""
-    
+
     def test_create_finding(self):
         """Test creating a review finding."""
         finding = ReviewFinding(
@@ -26,13 +21,13 @@ class TestReviewFinding:
             line_number=42,
             suggested_fix="Use parameterized queries.",
         )
-        
+
         assert finding.category == FindingCategory.SECURITY
         assert finding.severity == Severity.HIGH
         assert finding.title == "SQL Injection Vulnerability"
         assert finding.file_path == "app.py"
         assert finding.line_number == 42
-    
+
     def test_finding_to_dict(self):
         """Test converting finding to dictionary."""
         finding = ReviewFinding(
@@ -41,7 +36,7 @@ class TestReviewFinding:
             title="Missing docstring",
             description="Function lacks documentation.",
         )
-        
+
         d = finding.to_dict()
         assert d["category"] == "best_practice"
         assert d["severity"] == "low"
@@ -50,7 +45,7 @@ class TestReviewFinding:
 
 class TestAgentResponse:
     """Test the AgentResponse dataclass."""
-    
+
     def test_create_response(self):
         """Test creating an agent response."""
         findings = [
@@ -67,7 +62,7 @@ class TestAgentResponse:
                 description="Function exceeds 50 lines.",
             ),
         ]
-        
+
         response = AgentResponse(
             agent_name="security_expert",
             timestamp=datetime.now(),
@@ -76,13 +71,13 @@ class TestAgentResponse:
             summary="Found 2 issues",
             execution_time_seconds=5.5,
         )
-        
+
         assert response.agent_name == "security_expert"
         assert len(response.findings) == 2
         assert response.critical_count == 1
         assert response.high_count == 0
         assert response.has_blocking_issues is True
-    
+
     def test_response_without_blocking_issues(self):
         """Test response without blocking issues."""
         findings = [
@@ -93,7 +88,7 @@ class TestAgentResponse:
                 description="Consider refactoring.",
             ),
         ]
-        
+
         response = AgentResponse(
             agent_name="python_expert",
             timestamp=datetime.now(),
@@ -101,11 +96,11 @@ class TestAgentResponse:
             findings=findings,
             summary="Found 1 suggestion",
         )
-        
+
         assert response.critical_count == 0
         assert response.high_count == 0
         assert response.has_blocking_issues is False
-    
+
     def test_response_to_dict(self):
         """Test converting response to dictionary."""
         response = AgentResponse(
@@ -116,7 +111,7 @@ class TestAgentResponse:
             summary="No issues found",
             execution_time_seconds=2.0,
         )
-        
+
         d = response.to_dict()
         assert d["agent_name"] == "terraform_expert"
         assert d["files_reviewed"] == ["main.tf"]
@@ -127,7 +122,7 @@ class TestAgentResponse:
 
 class TestSeverity:
     """Test severity levels."""
-    
+
     def test_severity_values(self):
         """Test severity enum values."""
         assert Severity.CRITICAL.value == "critical"
@@ -139,7 +134,7 @@ class TestSeverity:
 
 class TestFindingCategory:
     """Test finding categories."""
-    
+
     def test_category_values(self):
         """Test category enum values."""
         assert FindingCategory.SECURITY.value == "security"

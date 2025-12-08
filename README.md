@@ -1,300 +1,281 @@
-# Agent-to-Agent Code Review Pipeline
+# 🎭 The Code Whisperers
 
-A multi-agent AI system for comprehensive code reviews, featuring specialized expert agents for Terraform/IaC, GitOps, Jenkins, Python, Security, and Cost Optimization.
+### _Your Personal Army of Mass Code Reviewers_
 
-## Features
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Mypy: strict-ish](https://img.shields.io/badge/mypy-strict--ish-blue)](http://mypy-lang.org/)
 
-- 🤖 **Multi-Agent Architecture**: Specialized AI agents for different domains
-- 🔄 **LangGraph Orchestration**: Coordinate multiple agents efficiently
-- 🔍 **Git Integration**: Review changed files automatically
-- ✅ **Validation & Testing**: Built-in code validation and test execution
-- 📊 **Comprehensive Reports**: Detailed markdown or JSON reports
-- 🔐 **Security Analysis**: Detect vulnerabilities and secrets
-- 💰 **Cost Optimization**: Cloud cost recommendations
-- 🎯 **Hallucination Detection**: Verify AI-generated code accuracy
+> _"Why have one code reviewer when you can have seven AI experts arguing about your semicolons?"_
 
-## Expert Agents
+Tired of begging colleagues for code reviews? Sick of waiting three days for a "LGTM"? **The Code Whisperers** assembles a crack team of AI specialists who'll dissect your code with the enthusiasm of a caffeinated senior developer at 2 AM.
 
-| Agent | Expertise |
-|-------|-----------|
-| **Terraform Expert** | IaC best practices, security, cost optimization |
-| **GitOps Expert** | Kubernetes, Helm, ArgoCD, Flux configurations |
-| **Jenkins Expert** | CI/CD pipelines, Groovy, shared libraries |
-| **Python Expert** | Code quality, testing, security |
-| **Security Expert** | OWASP, secrets, vulnerabilities |
-| **Cost Expert** | Cloud cost optimization, FinOps |
+Each agent brings their own brand of _constructive criticism_ (read: they have opinions and they're not afraid to share them).
 
-## Installation
+## 🦸 Meet The Squad
 
-### Prerequisites
+| Agent                    | Expertise                                                  |
+| ------------------------ | ---------------------------------------------------------- |
+| 🏗️ **Terraform Expert**  | IaC best practices, security, compliance, module design    |
+| 🚀 **GitOps Expert**     | Kubernetes, Helm, ArgoCD, Flux, deployment patterns        |
+| 🔧 **Jenkins Expert**    | CI/CD pipelines, Groovy, shared libraries, security        |
+| 🐍 **Python Expert**     | Pythonic code, type hints, testing, framework patterns     |
+| 🔒 **Security Expert**   | OWASP Top 10, secrets detection, vulnerability analysis    |
+| 💰 **Cost Expert**       | Cloud cost optimization, resource right-sizing, FinOps     |
+| 📚 **Clean Code Expert** | Software craftsmanship, SOLID principles, DRY, code smells |
+| ☁️ **AWS Expert**        | CloudFormation, IAM, CDK, SAM, Well-Architected Framework  |
 
-- Python 3.10+
-- Git
-- API key for OpenAI, Anthropic, or Azure OpenAI
+## ✨ What You Get
 
-### Setup
+- **8 specialized reviewers** who never call in sick, never need coffee breaks, and won't passive-aggressively Slack you about your code style
+- **Free AI options** - Because your code deserves judgment that doesn't cost $0.03 per snarky comment
+- **Git-aware reviews** - They know what you changed and they're ready to talk about it
+- **Actually useful output** - Markdown reports, JSON for the robots, or just straight to your terminal
+
+## 🚀 Quick Start (60 Seconds to Your First Roast)
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/agent-to-agent.git
-cd agent-to-agent
+# Summon the squad
+git clone https://github.com/sethjchalmers/code-whisperers.git
+cd code-whisperers
 
-# Create virtual environment
+# Prepare the ritual circle (virtual environment)
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # Windows: .\venv\Scripts\activate
 
-# Install dependencies
+# Install their dependencies (they're high maintenance)
 pip install -r requirements.txt
 
-# Or install as package
-pip install -e .
+# Get a free GitHub token (no special permissions needed)
+# https://github.com/settings/tokens
+export GITHUB_TOKEN=ghp_your_token_here
 
-# Configure environment
-cp .env.example .env
-# Edit .env with your API keys
+# Unleash them on your code
+python -m cli.main review --staged
 ```
 
-## Usage
+Watch as eight AI experts simultaneously tell you everything wrong with your code! _Fun!_
 
-### Command Line Interface
+## 🆓 Running the Squad (For Free!)
+
+### Option 1: GitHub Models API (The Recommended Free Lunch)
+
+GitHub gives you **free access** to GPT-4o, Llama, and Mistral. Yes, _free_. No, it's not a trap.
 
 ```bash
-# Review changed files (compares current branch to main)
-python -m cli.main review --base main
+# Get token: github.com/settings/tokens (no scopes needed)
+export GITHUB_TOKEN=ghp_your_token_here
 
-# Review specific files
-python -m cli.main review --files src/main.py terraform/main.tf
-
-# Review with git diff range
-python -m cli.main review --diff HEAD~5..HEAD
-
-# Include full codebase context
-python -m cli.main review --base main --include-codebase
-
-# Run specific agents only
-python -m cli.main review --agents terraform security python
-
-# Enable cross-validation between agents
-python -m cli.main review --cross-validate
-
-# Output to file
-python -m cli.main review --output report.md --format markdown
-
-# Validate files (no AI, just syntax/structure)
-python -m cli.main validate --files *.tf *.py
-
-# Run tests
-python -m cli.main test --base main
-
-# Show configuration
-python -m cli.main config --show
+# Let them loose
+python -m cli.main review --provider github-models
 ```
 
-### Python API
+**Model Menu:**
+
+- `gpt-4o` - The overachiever (default)
+- `gpt-4o-mini` - Faster, still judges you
+- `meta-llama-3.1-70b-instruct` - Open source and opinionated
+- `mistral-large-2411` - French, sophisticated, will critique your architecture
+
+### Option 2: Ollama (The Paranoid's Choice)
+
+Run everything locally. Your code never leaves your machine. Perfect for when you're working on _totally-not-skynet_.
+
+```bash
+# Install Ollama from https://ollama.ai
+ollama pull llama3.1
+
+# Summon local spirits
+python -m cli.main review --provider ollama --model llama3.1
+```
+
+### Option 3: GitHub Copilot (If You're Already Paying)
+
+Got a Copilot subscription? Put it to work:
+
+```bash
+# Terminal 1: Start the séance
+python copilot_proxy.py
+
+# Terminal 2: Channel the reviews
+python -m cli.main review --provider copilot
+```
+
+## 📖 Battle Commands
+
+```bash
+# The basics
+python -m cli.main review                    # Review staged changes (the coward's choice)
+python -m cli.main review --files *.py       # Review specific files (targeted strike)
+python -m cli.main review --files "**/*.tf"  # Review all Terraform (Terry's favorite)
+
+# Speed vs thoroughness
+python -m cli.main review --parallel         # All agents at once (chaos mode)
+python -m cli.main review --no-repo-context  # Skip context (speed run)
+
+# Output options
+python -m cli.main review --output roast.md  # Save the burns for later
+
+# The full arsenal
+python -m cli.main agents                    # See who's on duty
+python -m cli.main validate --files *.py     # Syntax check (no AI required)
+```
+
+## 🎯 Example Output
+
+```
+🎭 The Code Whisperers - Code Review
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📁 Files to review: 3
+🦸 Agents: 7
+
+Running terraform_expert... ✓ (2.3s)
+Running security_expert... ✓ (3.1s)
+Running python_expert... ✓ (2.8s)
+...
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 Review Summary
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Total Findings: 8
+  🔴 Critical: 1
+  🟠 High: 2
+  🟡 Medium: 3
+  🔵 Low: 2
+
+🔴 [CRITICAL] Hardcoded AWS Credentials
+   File: main.tf:15
+   Agent: security_expert
+
+   AWS access key hardcoded in provider configuration.
+   This could lead to credential exposure if committed.
+
+   Fix: Use environment variables or AWS credentials file
+```
+
+## 🧩 Recruiting New Agents
+
+Want an agent for your specific needs? Create your own specialist:
 
 ```python
-import asyncio
-from orchestration import ReviewPipeline
-from git_integration import GitIntegration
+# agents/react_rachel.py
+from agents.base_agent import BaseAgent
+from config.agent_config import AgentConfig
 
-async def main():
-    # Initialize git integration
-    git = GitIntegration("/path/to/repo")
-    
-    # Collect changed files
-    files = git.collect_changed_files_content(base_ref="main")
-    context = git.collect_context(base_ref="main")
-    
-    # Run review pipeline
-    pipeline = ReviewPipeline(parallel=True)
-    result = await pipeline.run(files, context)
-    
-    # Process results
-    print(f"Status: {result.status.value}")
-    print(f"Total findings: {len(result.consolidated_findings)}")
-    
-    for finding in result.consolidated_findings:
-        print(f"[{finding.severity.value}] {finding.title}")
-        print(f"  {finding.description}")
-        if finding.suggested_fix:
-            print(f"  Fix: {finding.suggested_fix}")
+REACT_CONFIG = AgentConfig(
+    name="react_rachel",
+    description="React Expert with Opinions™",
+    file_patterns=["*.jsx", "*.tsx"],
+    priority=2,
+    system_prompt="""You are React Rachel, a frontend expert who has mass
+    reviewed on too many useEffect dependency arrays to count.
 
-asyncio.run(main())
+    You care deeply about:
+    1. Hook rules (they're not suggestions!)
+    2. Performance (useMemo exists for a reason)
+    3. Accessibility (not everyone uses a mouse, Karen)
+    4. State management (Redux trauma is real)
+
+    Be helpful but don't sugarcoat it. Return findings as JSON.""",
+)
+
+class ReactRachel(BaseAgent):
+    def __init__(self):
+        super().__init__(REACT_CONFIG)
+
+    def get_expert_context(self) -> str:
+        return "I've mass reviewed more React components than I've had hot dinners."
 ```
 
-### Using the Coordinator
-
-```python
-from orchestration import AgentCoordinator
-
-async def coordinated_review():
-    coordinator = AgentCoordinator()
-    
-    files = {"main.tf": "...", "app.py": "..."}
-    result = await coordinator.coordinate_review(
-        files=files,
-        context={"git_diff": "..."},
-        cross_validate=True  # Agents validate each other's findings
-    )
-    
-    print(result["summary"])
-    for escalation in result["escalations"]:
-        print(f"⚠️ {escalation['type']}: {escalation['recommended_action']}")
-```
-
-## Configuration
+## ⚙️ Configuration (Teaching Them Manners)
 
 ### Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `LLM_PROVIDER` | LLM provider (openai/anthropic/azure) | `openai` |
-| `OPENAI_API_KEY` | OpenAI API key | - |
-| `LLM_MODEL` | Model to use | `gpt-4-turbo-preview` |
-| `LLM_TEMPERATURE` | Temperature for responses | `0.1` |
-| `GIT_BASE_BRANCH` | Default base branch | `main` |
-| `MAX_FILE_SIZE_KB` | Max file size to review | `500` |
-| `PARALLEL_AGENTS` | Run agents in parallel | `true` |
+| Variable           | What It Does                            | Default                  |
+| ------------------ | --------------------------------------- | ------------------------ |
+| `GITHUB_TOKEN`     | Your ticket to free AI                  | -                        |
+| `LLM_PROVIDER`     | Which AI backend to bother              | `github-models`          |
+| `LLM_MODEL`        | Specifically which AI to bother         | `gpt-4o`                 |
+| `LLM_TEMPERATURE`  | How spicy their responses get (0.0-1.0) | `0.1`                    |
+| `OLLAMA_ENDPOINT`  | Where your local Ollama lives           | `http://localhost:11434` |
+| `MAX_FILE_SIZE_KB` | "That file's too big, I'm not reading"  | `500`                    |
 
-### Custom Agent Configuration
+### .env File
 
-```python
-from config.agent_config import AgentConfig
-from agents.base_agent import BaseAgent
-
-# Create a custom agent
-custom_config = AgentConfig(
-    name="custom_expert",
-    description="Custom Expert Agent",
-    file_patterns=["*.custom"],
-    priority=1,
-    system_prompt="You are an expert in custom files..."
-)
-
-class CustomAgent(BaseAgent):
-    def __init__(self):
-        super().__init__(custom_config)
-    
-    def get_expert_context(self) -> str:
-        return "Additional context for custom files..."
+```env
+LLM_PROVIDER=github-models
+LLM_MODEL=gpt-4o
+GITHUB_TOKEN=ghp_xxxxxxxxxxxx
+LLM_TEMPERATURE=0.1  # Keep them professional (mostly)
 ```
 
-## Output Formats
+## 🏗️ How The Magic Happens
 
-### Markdown Report
+```
+┌─────────────┐     ┌──────────────┐     ┌─────────────────┐
+│  Your Code  │────▶│  Git Picks   │────▶│  Agents Fight   │
+│  (a mess)   │     │  The Victims │     │  Over Who       │
+└─────────────┘     └──────────────┘     │  Reviews What   │
+                                         └────────┬────────┘
+                    ┌─────────────────────────────┘
+                    ▼
+        ┌───────────────────────┐
+        │  The Squad Reviews    │
+        │  ┌─────┐ ┌─────┐     │
+        │  │🏗️   │ │ 🔒  │ ... │
+        │  └─────┘ └─────┘     │
+        └───────────┬───────────┘
+                    │
+                    ▼
+        ┌───────────────────────┐
+        │  Findings Compiled    │
+        │  Ego Bruised          │
+        │  Code Improved        │
+        └───────────────────────┘
+```
 
-```markdown
-# Code Review Report
+## 🧪 Testing (Yes, We Test Our Code Review Tool)
 
-**Status:** ⛔ BLOCKING ISSUES FOUND
+```bash
+# Run the full test suite
+pytest tests/ -v
 
-## Summary
-- Total Findings: 12
-- Agents Executed: 6
+# With coverage (we're thorough like that)
+pytest tests/ --cov=agents --cov=orchestration --cov-report=html
 
-### Findings by Severity
-- 🔴 Critical: 1
-- 🟠 High: 3
-- 🟡 Medium: 5
-- 🔵 Low: 3
+# 48 tests. All passing. We're not hypocrites.
+```
+
+## 🤝 Join The Team
+
+Found a bug? Want to add an agent? Have opinions about our opinions?
+
+1. Fork it
+2. Branch it (`git checkout -b feature/agent-who-judges-css`)
+3. Test it (`pytest tests/ -v`)
+4. Lint it (`pre-commit run --all-files`)
+5. Ship it (`git commit -m 'feat: add CSS Critic agent'`)
+6. PR it
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full onboarding process.
+
+## 📄 License
+
+MIT - Do whatever you want, just don't blame us when Security Sam roasts your production credentials.
+
+## 🙏 Standing On The Shoulders Of Giants
+
+- [LangChain](https://github.com/langchain-ai/langchain) - Making AI orchestration almost easy
+- [GitHub Models](https://github.com/marketplace/models) - Free AI for the masses
+- Uncle Bob, Martin Fowler, and every developer who ever said "we should probably review this"
 
 ---
 
-## Terraform Expert
-
-### 🔴 CRITICAL Severity
-
-#### Hardcoded AWS Access Key
-**Location:** `terraform/main.tf` (line 15)
-
-AWS access key is hardcoded in the configuration...
-
-**Suggested Fix:**
-```hcl
-variable "aws_access_key" {
-  type      = string
-  sensitive = true
-}
-```
-```
-
-### JSON Output
-
-```json
-{
-  "status": "completed",
-  "agent_responses": [...],
-  "consolidated_findings": [
-    {
-      "category": "security",
-      "severity": "critical",
-      "title": "Hardcoded AWS Access Key",
-      "description": "...",
-      "file_path": "terraform/main.tf",
-      "line_number": 15,
-      "suggested_fix": "..."
-    }
-  ],
-  "summary": "...",
-  "total_execution_time": 45.2
-}
-```
-
-## Architecture
-
-```
-agent-to-agent/
-├── agents/                 # Expert agent implementations
-│   ├── base_agent.py      # Abstract base class
-│   └── expert_agents.py   # Specialized agents
-├── cli/                   # Command-line interface
-│   └── main.py
-├── config/                # Configuration management
-│   ├── settings.py       # Global settings
-│   └── agent_config.py   # Agent configurations
-├── git_integration/       # Git utilities
-│   └── git_utils.py
-├── orchestration/         # Pipeline orchestration
-│   ├── pipeline.py       # LangGraph pipeline
-│   └── coordinator.py    # Agent coordinator
-├── testing/              # Validation and testing
-│   ├── test_runner.py
-│   └── validators.py
-└── reports/              # Generated reports
-```
-
-## Workflow
-
-1. **File Collection**: Git integration collects changed files and diff
-2. **Validation**: Syntax and structure validation (optional)
-3. **Agent Dispatch**: Files routed to relevant expert agents
-4. **Parallel Review**: Agents analyze files concurrently
-5. **Cross-Validation**: Agents validate critical findings (optional)
-6. **Consolidation**: Findings merged and deduplicated
-7. **Report Generation**: Markdown/JSON report created
-
-## Best Practices
-
-### For Terraform Reviews
-- Ensure Terraform is initialized (`terraform init`)
-- Include `.tfvars` files if needed for context
-
-### For Kubernetes Reviews
-- Include related manifests (Deployments + Services)
-- Consider using `--include-codebase` for full context
-
-### For Python Reviews
-- Include `requirements.txt` or `pyproject.toml`
-- Include test files for complete analysis
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests: `pytest`
-5. Submit a pull request
-
-## License
-
-MIT License - see LICENSE file for details.
+<p align="center">
+  <i>Built with ❤️, mass reviewed by The Code Whisperers themselves</i>
+  <br><br>
+  <b>Remember: They're not mean, they're <i>thorough</i>.</b>
+</p>
