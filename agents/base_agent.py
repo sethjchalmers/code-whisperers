@@ -149,16 +149,17 @@ class BaseAgent(ABC):
             )
         elif self.settings.llm_provider == "copilot":
             # Use Copilot through OpenAI-compatible endpoint
-            # This requires running a Copilot proxy server (see copilot_proxy.py)
+            # Option 1: VS Code extension (recommended) - see vscode-extension/
+            # Option 2: Legacy proxy script - see copilot_proxy.py
             # Add /v1 to base_url since ChatOpenAI appends /chat/completions
             base_url = self.settings.copilot_endpoint
             if not base_url.endswith("/v1"):
                 base_url = f"{base_url}/v1"
             return ChatOpenAI(
-                model=model or "gpt-4",
+                model=model or "gpt-4o",
                 temperature=temperature,
                 base_url=base_url,
-                api_key="copilot",  # Placeholder, auth handled by proxy
+                api_key="copilot",  # Placeholder, auth handled by VS Code extension
             )
         elif self.settings.llm_provider == "ollama":
             # Use Ollama for local models

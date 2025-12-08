@@ -1,0 +1,96 @@
+{
+  "name": "code-whisperers-copilot-bridge",
+  "displayName": "Code Whisperers - Copilot Bridge",
+  "description": "Exposes GitHub Copilot's language models as an API endpoint for the Code Whisperers CLI tool",
+  "version": "1.0.0",
+  "publisher": "sethjchalmers",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sethjchalmers/code-whisperers"
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other",
+    "Machine Learning"
+  ],
+  "keywords": [
+    "copilot",
+    "code review",
+    "ai",
+    "code-whisperers"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "codeWhisperers.startBridge",
+        "title": "Code Whisperers: Start Copilot Bridge Server"
+      },
+      {
+        "command": "codeWhisperers.stopBridge",
+        "title": "Code Whisperers: Stop Copilot Bridge Server"
+      },
+      {
+        "command": "codeWhisperers.showStatus",
+        "title": "Code Whisperers: Show Bridge Status"
+      }
+    ],
+    "configuration": {
+      "title": "Code Whisperers Copilot Bridge",
+      "properties": {
+        "codeWhisperers.bridge.port": {
+          "type": "number",
+          "default": 11435,
+          "description": "Port for the Copilot Bridge HTTP server"
+        },
+        "codeWhisperers.bridge.autoStart": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically start the bridge server when VS Code opens"
+        },
+        "codeWhisperers.bridge.preferredModel": {
+          "type": "string",
+          "default": "gpt-4o",
+          "enum": [
+            "gpt-4o",
+            "gpt-4",
+            "gpt-3.5-turbo",
+            "claude-3.5-sonnet"
+          ],
+          "description": "Preferred Copilot model to use"
+        },
+        "codeWhisperers.bridge.requestTimeout": {
+          "type": "number",
+          "default": 120000,
+          "description": "Request timeout in milliseconds (default: 120000 = 2 minutes)"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.90.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "eslint": "^8.54.0",
+    "typescript": "^5.3.0",
+    "@vscode/vsce": "^2.22.0"
+  },
+  "extensionDependencies": [
+    "github.copilot-chat"
+  ]
+}
