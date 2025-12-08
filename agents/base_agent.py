@@ -170,6 +170,18 @@ class BaseAgent(ABC):
                 temperature=temperature,
                 base_url=self.settings.ollama_endpoint,
             )
+        elif self.settings.llm_provider == "github-models":
+            # Use GitHub Models API (free tier with token limits)
+            # Endpoint runs via github_models_proxy.py on port 11435
+            base_url = self.settings.copilot_endpoint
+            if not base_url.endswith("/v1"):
+                base_url = f"{base_url}/v1"
+            return ChatOpenAI(
+                model=model or "gpt-4o",
+                temperature=temperature,
+                base_url=base_url,
+                api_key="github-models",  # Placeholder, auth handled by proxy
+            )
         else:
             raise ValueError(f"Unknown LLM provider: {self.settings.llm_provider}")
 
