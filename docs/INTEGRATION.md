@@ -52,38 +52,45 @@ code-whisperers review --diff HEAD~1
 
 ## Docker
 
-### Build the Image
+### Pre-built Image (Recommended)
+
+The fastest way to get started - use the pre-built image from GitHub Container Registry:
 
 ```bash
-docker build -t code-whisperers .
-```
+# Pull the image
+docker pull ghcr.io/sethjchalmers/code-whisperers:latest
 
-### Run a Review
-
-```bash
 # Review current directory against main branch
 docker run --rm \
   -v $(pwd):/repo \
   -e GITHUB_TOKEN=$GITHUB_TOKEN \
-  code-whisperers review --base main
+  ghcr.io/sethjchalmers/code-whisperers review --base main
 
 # Review last commit
 docker run --rm \
   -v $(pwd):/repo \
   -e GITHUB_TOKEN=$GITHUB_TOKEN \
-  code-whisperers review --diff HEAD~1
+  ghcr.io/sethjchalmers/code-whisperers review --diff HEAD~1
 
 # Review specific files
 docker run --rm \
   -v $(pwd):/repo \
   -e GITHUB_TOKEN=$GITHUB_TOKEN \
-  code-whisperers review --files /repo/src/main.py
+  ghcr.io/sethjchalmers/code-whisperers review --files /repo/src/main.py
+```
+
+### Build Locally (Optional)
+
+If you want to customize the image:
+
+```bash
+docker build -t code-whisperers .
 ```
 
 ### Docker Compose
 
 ```bash
-# Use the included docker-compose.yml
+# Use the included docker-compose.yml (uses pre-built image)
 docker-compose run --rm review
 
 # Or with custom diff range

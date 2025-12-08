@@ -7,8 +7,10 @@
 
 services:
   review:
-    build: .
-    image: code-whisperers:latest
+    # Use pre-built image from GitHub Container Registry
+    image: ghcr.io/sethjchalmers/code-whisperers:latest
+    # Or build locally: docker-compose build review
+    # build: .
     volumes:
       - .:/repo:ro # Mount current directory as read-only
       - ~/.gitconfig:/home/codewhisperer/.gitconfig:ro # Git config

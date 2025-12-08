@@ -265,17 +265,19 @@ code code-whisperers
 # VS Code will prompt: "Reopen in Container" - click it!
 ```
 
+Uses the pre-built image from GitHub Container Registry - no build required!
+
 ### Docker (Review Any Repo)
 
 ```bash
-# Build the image
-docker build -t code-whisperers .
+# Pull the pre-built image
+docker pull ghcr.io/sethjchalmers/code-whisperers:latest
 
 # Review your current directory
-docker run -v $(pwd):/repo -e GITHUB_TOKEN=$GITHUB_TOKEN \
-    code-whisperers review /repo --provider github-models
+docker run --rm -v $(pwd):/repo -e GITHUB_TOKEN=$GITHUB_TOKEN \
+    ghcr.io/sethjchalmers/code-whisperers review --base main
 
-# Or use docker-compose
+# Or use docker-compose (even simpler)
 docker-compose run --rm review
 ```
 

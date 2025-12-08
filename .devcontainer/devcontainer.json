@@ -1,9 +1,12 @@
 {
   "name": "Code Whisperers",
-  "build": {
-    "dockerfile": "Dockerfile",
-    "context": ".."
-  },
+  // Use pre-built image from GitHub Container Registry (faster startup)
+  // To build locally instead, comment out "image" and uncomment "build"
+  "image": "ghcr.io/sethjchalmers/code-whisperers:latest",
+  // "build": {
+  //   "dockerfile": "Dockerfile",
+  //   "context": ".."
+  // },
   "features": {
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers/features/github-cli:1": {}
