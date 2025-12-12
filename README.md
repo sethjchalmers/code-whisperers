@@ -90,7 +90,25 @@ ollama pull llama3.1
 python -m cli.main review --provider ollama --model llama3.1
 ```
 
-### Option 3: GitHub Copilot (If You're Already Paying)
+### Option 3: Grok / xAI (The Spicy Choice)
+
+Elon's AI. Fast, capable, and will probably tell you to ship it.
+
+```bash
+# Get your API key from https://console.x.ai
+export XAI_API_KEY=xai-xxxxxxxxxxxx
+
+# Let Grok judge your code
+python -m cli.main review --provider grok --model grok-2-1212
+```
+
+**Model Menu:**
+
+- `grok-2-1212` - The latest and greatest (default)
+- `grok-beta` - If you're feeling adventurous
+- `grok-2-vision-1212` - Can see your diagrams (and judge them)
+
+### Option 4: GitHub Copilot (If You're Already Paying)
 
 Got a Copilot subscription? Put it to work:
 
@@ -111,6 +129,10 @@ python -m cli.main review --files *.py       # Review specific files (targeted s
 python -m cli.main review --diff HEAD~1      # Review last commit
 python -m cli.main review --base develop     # Review changes vs develop branch
 
+# 🔧 Auto-fix mode (NEW!)
+python -m cli.main review --autofix          # Review AND fix issues automatically
+python -m cli.main review --files app.py --autofix  # Fix specific file
+
 # Speed vs thoroughness
 python -m cli.main review --parallel         # All agents at once (chaos mode, default)
 python -m cli.main review --sequential       # One at a time (patient mode)
@@ -124,6 +146,33 @@ python -m cli.main review --format json      # Machine-readable roasts
 python -m cli.main validate --files *.py     # Syntax check (no AI required)
 python -m cli.main config --show             # See current config
 ```
+
+### 🔧 Auto-Fix Mode
+
+The `--autofix` flag tells agents to not just _complain_ about your code, but actually _fix it_:
+
+```bash
+# Review and fix security issues
+python -m cli.main review --files app.py --agents security --autofix
+
+# Fix everything in your last commit
+python -m cli.main review --diff HEAD~1 --autofix
+```
+
+**What happens:**
+
+1. Agents review your code and find issues
+2. For each issue, the autofix agent generates a fix
+3. Fixes are applied directly to your files
+4. VS Code Source Control opens so you can review changes
+5. You approve or revert the changes
+
+**Example fixes:**
+
+- Hardcoded credentials → Environment variables
+- `os.system()` → `subprocess.run()`
+- SQL injection → Parameterized queries
+- Missing type hints → Added annotations
 
 ## 🎯 Example Output
 
@@ -204,6 +253,8 @@ class ReactRachel(BaseAgent):
 | `LLM_MODEL`        | Specifically which AI to bother         | `gpt-4o`                 |
 | `LLM_TEMPERATURE`  | How spicy their responses get (0.0-1.0) | `0.1`                    |
 | `OLLAMA_ENDPOINT`  | Where your local Ollama lives           | `http://localhost:11434` |
+| `XAI_API_KEY`      | xAI API key for Grok models             | -                        |
+| `XAI_ENDPOINT`     | xAI API endpoint                        | `https://api.x.ai/v1`    |
 | `MAX_FILE_SIZE_KB` | "That file's too big, I'm not reading"  | `500`                    |
 
 ### .env File

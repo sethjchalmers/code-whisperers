@@ -118,6 +118,11 @@ Examples:
     review_parser.add_argument(
         "--cross-validate", action="store_true", help="Enable cross-validation between agents"
     )
+    review_parser.add_argument(
+        "--autofix",
+        action="store_true",
+        help="Automatically fix issues found during review, then show changes in VS Code git view",
+    )
 
     # Validate command
     validate_parser = subparsers.add_parser("validate", help="Validate files without AI review")
@@ -218,11 +223,17 @@ async def run_review(args) -> int:
             for response in coord_result.get("agent_responses", []):
                 output += f"\n\n## {response.get('agent_name', 'Unknown')}\n"
                 output += response.get("summary", "")
+
+        # Autofix not supported with cross-validate yet
+        if getattr(args, "autofix", False):
+            print("⚠️  Autofix is not yet supported with --cross-validate", file=sys.stderr)
     else:
-        pipeline = ReviewPipeline(parallel=parallel)
+        # Get agent names filter if provided
+        agent_names = getattr(args, "agents", None)
+        pipeline = ReviewPipeline(parallel=parallel, agent_names=agent_names)
         result = await pipeline.run(files, context)
 
-        # Format output
+        # Format base output first
         if args.format == "json":
             output = json.dumps(result.to_dict(), indent=2)
         elif args.format == "text":
@@ -232,6 +243,42 @@ async def run_review(args) -> int:
         else:
             # Markdown format - generate full report
             output = generate_markdown_report(result)
+
+        # Run autofix if requested and there are findings
+        if getattr(args, "autofix", False) and result.consolidated_findings:
+            from agents.autofix_agent import (
+                AutofixAgent,
+                open_vscode_git_view,
+                show_git_diff_summary,
+            )
+
+            print(f"\n🔧 Auto-fixing {len(result.consolidated_findings)} issue(s)...\n")
+
+            autofix = AutofixAgent()
+            fix_results = await autofix.fix_findings(result.consolidated_findings, files, repo_path)
+
+            # Summary of fixes
+            successful = sum(1 for r in fix_results if r.success)
+            failed = len(fix_results) - successful
+
+            print(f"\n✅ Fixed: {successful} | ❌ Failed: {failed}")
+
+            # Show what was fixed
+            if successful > 0:
+                show_git_diff_summary(repo_path)
+                open_vscode_git_view()
+
+            # Append fix results to output
+            if args.format != "json":
+                output += "\n\n---\n\n## 🔧 Auto-Fix Results\n\n"
+                for fr in fix_results:
+                    status = "✅" if fr.success else "❌"
+                    output += f"- {status} **{fr.finding.title}**"
+                    if fr.success and fr.explanation:
+                        output += f": {fr.explanation}"
+                    elif fr.error:
+                        output += f": {fr.error}"
+                    output += "\n"
 
     # Output results
     if args.output:

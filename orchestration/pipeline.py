@@ -94,10 +94,28 @@ class ReviewPipeline:
     5. Generates a final report
     """
 
-    def __init__(self, parallel: bool = True):
+    def __init__(self, parallel: bool = True, agent_names: list[str] | None = None):
         self.settings = get_settings()
-        self.parallel = parallel
-        self.agents = create_all_agents()
+        # Force sequential mode for Ollama (can only handle one request at a time)
+        if self.settings.llm_provider == "ollama":
+            self.parallel = False
+        else:
+            self.parallel = parallel
+        self.all_agents = create_all_agents()
+        # Filter agents if specific names provided
+        if agent_names:
+            agent_name_set = {name.lower() for name in agent_names}
+            self.agents = [
+                agent
+                for agent in self.all_agents
+                if agent.config.name.lower().replace("_expert", "") in agent_name_set
+                or agent.config.name.lower() in agent_name_set
+            ]
+            if not self.agents:
+                # No matches found, use all agents
+                self.agents = self.all_agents
+        else:
+            self.agents = self.all_agents
         self.graph = self._build_graph()
         self.logger = logging.getLogger("pipeline")
 
@@ -173,12 +191,18 @@ class ReviewPipeline:
                     responses.append(result)
         else:
             # Run agents sequentially
-            for agent in self.agents:
+            for i, agent in enumerate(self.agents, 1):
+                print(f"  [{i}/{len(self.agents)}] Running {agent.config.name}...", flush=True)
                 try:
                     response = await agent.review(files, context)
                     responses.append(response)
+                    print(
+                        f"  [{i}/{len(self.agents)}] {agent.config.name} ✓ ({response.execution_time_seconds:.1f}s)",
+                        flush=True,
+                    )
                 except Exception as e:
                     self.logger.error(f"Agent {agent.config.name} failed: {e}")
+                    print(f"  [{i}/{len(self.agents)}] {agent.config.name} ✗ (error)", flush=True)
                     responses.append(
                         AgentResponse(
                             agent_name=agent.config.name,

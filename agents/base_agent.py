@@ -147,6 +147,15 @@ class BaseAgent(ABC):
                 api_key=self.settings.azure_openai_api_key,
                 azure_endpoint=self.settings.azure_openai_endpoint,
             )
+        elif self.settings.llm_provider == "grok":
+            # Use Grok (xAI) - OpenAI-compatible API
+            # Models: grok-beta, grok-2-1212, grok-2-vision-1212
+            return ChatOpenAI(
+                model=model or "grok-2-1212",
+                temperature=temperature,
+                base_url=self.settings.xai_endpoint,
+                api_key=self.settings.xai_api_key,
+            )
         elif self.settings.llm_provider == "copilot":
             # Use Copilot through OpenAI-compatible endpoint
             # Option 1: VS Code extension (recommended) - see vscode-extension/
@@ -169,6 +178,8 @@ class BaseAgent(ABC):
                 model=model or "llama3.1",
                 temperature=temperature,
                 base_url=self.settings.ollama_endpoint,
+                num_ctx=32768,  # Large context for code reviews
+                timeout=120,  # 2 minute timeout
             )
         elif self.settings.llm_provider == "github-models":
             # Use GitHub Models API (free tier with token limits)
@@ -233,14 +244,28 @@ class BaseAgent(ABC):
             # Build the review prompt
             prompt = self._build_review_prompt(relevant_files, context)
 
+            # Use lite prompt for Ollama or when lite_prompts is enabled
+            use_lite = self.settings.lite_prompts or self.settings.llm_provider == "ollama"
+            if use_lite:
+                from config.agent_config import BASE_LITE_PROMPT
+
+                system_prompt = BASE_LITE_PROMPT
+            else:
+                system_prompt = self.config.system_prompt
+
+            # Show prompt size for debugging
+            prompt_len = len(prompt) + len(system_prompt)
+            print(f"      Prompt size: ~{prompt_len // 4} tokens, waiting for LLM...", flush=True)
+
             # Call the LLM
             messages = [
-                SystemMessage(content=self.config.system_prompt),
+                SystemMessage(content=system_prompt),
                 HumanMessage(content=prompt),
             ]
 
             response = await self.llm.ainvoke(messages)
             raw_response = response.content
+            print(f"      Response received ({len(raw_response)} chars)", flush=True)
 
             # Parse the response
             findings = self._parse_response(raw_response, list(relevant_files.keys()))

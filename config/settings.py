@@ -21,6 +21,12 @@ class Settings:
         default_factory=lambda: os.getenv("AZURE_OPENAI_ENDPOINT")
     )
 
+    # Grok (xAI) Configuration
+    xai_api_key: str | None = field(default_factory=lambda: os.getenv("XAI_API_KEY"))
+    xai_endpoint: str = field(
+        default_factory=lambda: os.getenv("XAI_ENDPOINT", "https://api.x.ai/v1")
+    )
+
     # Copilot/Local Configuration
     copilot_endpoint: str = field(
         default_factory=lambda: os.getenv("COPILOT_ENDPOINT", "http://localhost:11435")
@@ -30,7 +36,7 @@ class Settings:
     )
 
     # Default LLM provider and model
-    # Providers: openai, anthropic, azure, copilot, ollama, github-models
+    # Providers: openai, anthropic, azure, grok, copilot, ollama, github-models
     llm_provider: str = field(default_factory=lambda: os.getenv("LLM_PROVIDER", "github-models"))
     llm_model: str = field(default_factory=lambda: os.getenv("LLM_MODEL", "gpt-4o"))
     llm_temperature: float = field(
@@ -45,6 +51,9 @@ class Settings:
     max_file_size_kb: int = field(default_factory=lambda: int(os.getenv("MAX_FILE_SIZE_KB", "500")))
     parallel_agents: bool = field(
         default_factory=lambda: os.getenv("PARALLEL_AGENTS", "true").lower() == "true"
+    )
+    lite_prompts: bool = field(
+        default_factory=lambda: os.getenv("LITE_PROMPTS", "false").lower() == "true"
     )
 
     # Testing Configuration
@@ -78,6 +87,9 @@ class Settings:
                 errors.append("AZURE_OPENAI_API_KEY is required when using Azure provider")
             if not self.azure_openai_endpoint:
                 errors.append("AZURE_OPENAI_ENDPOINT is required when using Azure provider")
+        elif self.llm_provider == "grok":
+            if not self.xai_api_key:
+                errors.append("XAI_API_KEY is required when using Grok provider")
         elif self.llm_provider == "copilot":
             # Copilot uses VS Code's built-in authentication, no API key needed
             pass

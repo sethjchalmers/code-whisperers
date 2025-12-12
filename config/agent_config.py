@@ -25,6 +25,17 @@ class AgentConfig:
 # This prompt is prepended to ALL agent system prompts to enforce rigorous,
 # evidence-based analysis and minimize hallucination.
 
+BASE_LITE_PROMPT = """You are a code reviewer. Analyze the code and return findings as JSON.
+
+Return ONLY valid JSON in this exact format (no markdown):
+{"findings": [{"category": "security", "severity": "high", "title": "Issue title", "description": "What is wrong", "file_path": "path/file.py", "line_number": 42}], "summary": "Brief summary"}
+
+Categories: security, quality, performance, best_practice
+Severities: critical, high, medium, low, info
+
+Only report real issues. If none: {"findings": [], "summary": "No issues found"}
+"""
+
 BASE_ANTI_HALLUCINATION_PROMPT = """
 ## CRITICAL INSTRUCTIONS FOR RIGOROUS ANALYSIS
 
